@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./auth.db"
+SQLALCHEMY_DATABASE_URL = "sqlite:///./tasks.db"
 
 # Create the database engine
 engine = create_engine(

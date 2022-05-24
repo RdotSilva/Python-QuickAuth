@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 import models
-from database import engine
+from database import engine, SessionLocal
 
 app = FastAPI()
 
@@ -8,6 +8,10 @@ app = FastAPI()
 models.Base.metadata.create_all(bind=engine)
 
 
-@app.get("/")
-async def create_database():
-    return {"Database": "Created"}
+# Create a local database session
+def get_db():
+    try:
+        db = SessionLocal()
+        yield db
+    finally:
+        db.close()

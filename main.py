@@ -44,6 +44,21 @@ async def read_task(task_id: int, db: Session = Depends(get_db)):
     raise http_exception()
 
 
+# Add a new task
+@app.post("/")
+async def create_task(task: Task, db: Session = Depends(get_db)):
+    # Map the task to the DB model
+    task_model = models.Tasks()
+    task_model.title = task.title
+    task_model.description = task.description
+    task_model.priority = task.priority
+    task_model.complete = task.complete
+
+    # Add to DB and commit
+    db.add(task_model)
+    db.commit()
+
+
 # General exception users for tasks
 def http_exception():
     return HTTPException(status_code=404, detail="Task not found")

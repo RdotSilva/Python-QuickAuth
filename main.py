@@ -1,3 +1,4 @@
+import http
 from fastapi import FastAPI, Depends, HTTPException
 import models
 from database import engine, SessionLocal
@@ -31,4 +32,9 @@ async def read_task(task_id: int, db: Session = Depends(get_db)):
 
     if task_model is not None:
         return task_model
-    raise HTTPException(status_code=404, detail="Task not found")
+    raise http_exception()
+
+
+# General exception users for tasks
+def http_exception():
+    return HTTPException(status_code=404, detail="Task not found")

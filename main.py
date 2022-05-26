@@ -82,6 +82,11 @@ async def update_task(task_id: int, task: Task, db: Session = Depends(get_db)):
     return {"status": 200, "transaction": "Successful"}
 
 
+# Generate a success response
+def successful_response(status_code: int):
+    return {"status": status_code, "transaction": "Successful"}
+
+
 # General exception users for tasks
 def http_exception():
     return HTTPException(status_code=404, detail="Task not found")

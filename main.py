@@ -58,6 +58,8 @@ async def create_task(task: Task, db: Session = Depends(get_db)):
     db.add(task_model)
     db.commit()
 
+    return {"status": 201, "transaction": "Successful"}
+
 
 # General exception users for tasks
 def http_exception():

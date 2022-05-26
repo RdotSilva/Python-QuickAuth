@@ -61,6 +61,27 @@ async def create_task(task: Task, db: Session = Depends(get_db)):
     return {"status": 201, "transaction": "Successful"}
 
 
+# Update an existing task by ID
+@app.put("/{task_id}")
+async def update_task(task_id: int, task: Task, db: Session = Depends(get_db)):
+    task_model = db.query(models.Tasks).filter(models.Tasks.id == task_id).first()
+
+    if task_model is None:
+        raise http_exception()
+
+    # Map the task to the DB model
+    task_model.title = task.title
+    task_model.description = task.description
+    task_model.priority = task.priority
+    task_model.complete = task.complete
+
+    # Add to DB and commit
+    db.add(task_model)
+    db.commit()
+
+    return {"status": 200, "transaction": "Successful"}
+
+
 # General exception users for tasks
 def http_exception():
     return HTTPException(status_code=404, detail="Task not found")

@@ -83,14 +83,14 @@ async def update_task(task_id: int, task: Task, db: Session = Depends(get_db)):
 
 
 # Remove an existing task by ID
-@app.put("/{task_id}")
+@app.delete("/{task_id}")
 async def delete_task(task_id: int, db: Session = Depends(get_db)):
     task_model = db.query(models.Tasks).filter(models.Tasks.id == task_id).first()
 
     if task_model is None:
         raise http_exception()
 
-    db.query(models.Tasks).filter(models.Tasks.id == task_id).delete()
+    db.delete(task_model)
 
     db.commit()
 

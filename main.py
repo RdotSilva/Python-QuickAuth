@@ -58,10 +58,7 @@ async def create_task(task: Task, db: Session = Depends(get_db)):
     db.add(task_model)
     db.commit()
 
-    return {
-        "status": 201,
-        "transaction": "Successful",
-    }
+    return successful_response(201)
 
 
 # Update an existing task by ID
@@ -82,10 +79,7 @@ async def update_task(task_id: int, task: Task, db: Session = Depends(get_db)):
     db.add(task_model)
     db.commit()
 
-    return {
-        "status": 200,
-        "transaction": "Successful",
-    }
+    return successful_response(200)
 
 
 # Remove an existing task by ID
@@ -100,7 +94,7 @@ async def delete_task(task_id: int, db: Session = Depends(get_db)):
 
     db.commit()
 
-    return {"status": 201, "transaction": "Successful"}
+    return successful_response(201)
 
 
 # Generate a success response

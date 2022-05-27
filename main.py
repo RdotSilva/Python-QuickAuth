@@ -58,7 +58,10 @@ async def create_task(task: Task, db: Session = Depends(get_db)):
     db.add(task_model)
     db.commit()
 
-    return {"status": 201, "transaction": "Successful"}
+    return {
+        "status": 201,
+        "transaction": "Successful",
+    }
 
 
 # Update an existing task by ID
@@ -79,7 +82,25 @@ async def update_task(task_id: int, task: Task, db: Session = Depends(get_db)):
     db.add(task_model)
     db.commit()
 
-    return {"status": 200, "transaction": "Successful"}
+    return {
+        "status": 200,
+        "transaction": "Successful",
+    }
+
+
+# Remove an existing task by ID
+@app.put("/{task_id}")
+async def delete_task(task_id: int, db: Session = Depends(get_db)):
+    task_model = db.query(models.Tasks).filter(models.Tasks.id == task_id).first()
+
+    if task_model is None:
+        raise http_exception()
+
+    db.query(models.Tasks).filter(models.Tasks.id == task_id).delete()
+
+    db.commit()
+
+    return {"status": 201, "transaction": "Successful"}
 
 
 # Generate a success response

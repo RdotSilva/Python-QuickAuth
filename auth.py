@@ -14,7 +14,7 @@ class CreateUser(BaseModel):
 
 
 # Create a new hashing context using bcrypt
-bcrypt_context = CryptContext(schemes=["bcrypt"], depreciated="auto")
+bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 app = FastAPI()
 
@@ -41,7 +41,10 @@ async def create_new_user(create_user: CreateUser):
     create_user_model.username = create_user.username
     create_user_model.first_name = create_user.first_name
     create_user_model.last_name = create_user.last_name
-    create_user_model.hashed_password = create_user.password
+
+    hashed_password = get_password_hash(create_user.password)
+
+    create_user_model.hashed_password = hashed_password
     create_user_model.last_name = create_user.last_name
     create_user_model.is_active = True
 

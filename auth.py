@@ -1,8 +1,10 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from pydantic import BaseModel
 from typing import Optional
 import models
 from passlib.context import CryptContext
+from sqlalchemy.orm import Session
+from database import SessionLocal, engine
 
 
 class CreateUser(BaseModel):
@@ -16,7 +18,23 @@ class CreateUser(BaseModel):
 # Create a new hashing context using bcrypt
 bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+# Create DB and handle all setup if auth.py is ran before main.py
+models.Base.metadata.create_all(bind=engine)
+
 app = FastAPI()
+
+
+def get_db():
+    """Create a local database session to pass into API routes
+
+    Yields:
+        db: A database session
+    """
+    try:
+        db = SessionLocal()
+        yield db
+    finally:
+        db.close()
 
 
 def get_password_hash(password):

@@ -14,11 +14,12 @@ class CreateUser(BaseModel):
 
 app = FastAPI()
 
-
+# Create a new user
 @app.post("/create/user")
 async def create_new_user(create_user: CreateUser):
-    create_user_model = models.Users()
 
+    # Map the task to the DB model
+    create_user_model = models.Users()
     create_user_model.email = create_user.email
     create_user_model.username = create_user.username
     create_user_model.first_name = create_user.first_name

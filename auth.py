@@ -51,7 +51,7 @@ def get_password_hash(password):
 
 # Create a new user
 @app.post("/create/user")
-async def create_new_user(create_user: CreateUser):
+async def create_new_user(create_user: CreateUser, db: Session = Depends(get_db)):
 
     # Map the task to the DB model
     create_user_model = models.Users()
@@ -66,4 +66,5 @@ async def create_new_user(create_user: CreateUser):
     create_user_model.last_name = create_user.last_name
     create_user_model.is_active = True
 
-    return create_user_model
+    db.add(create_user_model)
+    db.commit()

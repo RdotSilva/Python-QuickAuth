@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import Optional
 import models
+from passlib.context import CryptContext
 
 
 class CreateUser(BaseModel):
@@ -12,7 +13,23 @@ class CreateUser(BaseModel):
     password: str
 
 
+# Create a new hashing context using bcrypt
+bcrypt_context = CryptContext(schemes=["bcrypt"], depreciated="auto")
+
 app = FastAPI()
+
+
+def get_password_hash(password):
+    """Generate a hash for a password
+
+    Args:
+        password (string): The password to hash
+
+    Returns:
+        string: A hash for a password
+    """
+    return bcrypt_context.hash(password)
+
 
 # Create a new user
 @app.post("/create/user")

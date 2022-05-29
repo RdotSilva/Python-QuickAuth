@@ -5,6 +5,7 @@ import models
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 from database import SessionLocal, engine
+from fastapi.security import OAuth2PasswordRequestForm
 
 
 class CreateUser(BaseModel):
@@ -47,6 +48,19 @@ def get_password_hash(password):
         string: A hash for a password
     """
     return bcrypt_context.hash(password)
+
+
+def verify_password(plain_password, hashed_password):
+    """Compare plain text password with hashed password from database to verify the password is correct
+
+    Args:
+        plain_password (string): Plain text password to verify
+        hashed_password (string): Hashed password to verify against
+
+    Returns:
+        _type_: _description_
+    """
+    return bcrypt_context(verify(plain_password, hashed_password))
 
 
 # Create a new user

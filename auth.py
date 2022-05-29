@@ -56,11 +56,25 @@ def verify_password(plain_password, hashed_password):
     Args:
         plain_password (string): Plain text password to verify
         hashed_password (string): Hashed password to verify against
-
-    Returns:
-        _type_: _description_
     """
-    return bcrypt_context(verify(plain_password, hashed_password))
+    return bcrypt_context.verify(plain_password, hashed_password)
+
+
+def authenticate_user(username: str, password: str, db):
+    """Authenticate a user
+
+    Args:
+        username (string): The username to authenticate
+        password (string): The password to authenticate
+        db (db): The database to search
+    """
+    user = db.query(models.Users).filter(models.Users.username == username).first()
+
+    if not user:
+        return False
+    if not verify_password(password, user.hashed_password):
+        return False
+    return user
 
 
 # Create a new user

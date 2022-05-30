@@ -31,6 +31,9 @@ bcrypt_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 # Create DB and handle all setup if auth.py is ran before main.py
 models.Base.metadata.create_all(bind=engine)
 
+# Access token header information
+oauth2_bearer = OAuth2PasswordBearer(tokenUrl="token")
+
 app = FastAPI()
 
 
@@ -84,6 +87,31 @@ def authenticate_user(username: str, password: str, db):
     if not verify_password(password, user.hashed_password):
         return False
     return user
+
+
+def create_access_token(
+    username: str, user_id: int, expires_delta: Optional[timedelta] = None
+):
+    """Create an access token
+
+    Args:
+        username (str): The username to create a token for
+        user_id (int): The user_id to create a token for
+        expires_delta (Optional[timedelta], optional): Expiration time for access token. Defaults to None.
+
+    """
+    # Create the user payload
+    encode = {"sub": username, "id": user_id}
+
+    if expires_delta:
+        # Check that delta has not already expired
+        expire = datetime.utcnow() + expires_delta
+    else:
+        expire = datetime.utcnow() + timedelta(minutes=15)
+
+    # Update user payload with expire time
+    encode.update({"expire": expire})
+    return jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
 # Create a new user

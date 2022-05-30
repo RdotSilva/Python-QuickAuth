@@ -110,7 +110,7 @@ def create_access_token(
         expire = datetime.utcnow() + timedelta(minutes=15)
 
     # Update user payload with expire time
-    encode.update({"expire": expire})
+    encode.update({"exp": expire})
     return jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
 
 
@@ -144,4 +144,8 @@ async def login_for_access_token(
 
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
-    return "User Validated"
+
+    token_expires = timedelta(minutes=20)
+    token = create_access_token(user.username, user.id, expires_delta=token_expires)
+
+    return {"token": token}

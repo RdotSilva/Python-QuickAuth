@@ -113,6 +113,9 @@ def create_access_token(
     encode.update({"exp": expire})
     return jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
 
+async def get_current_user():
+    #TODO: Find current user by decoding the JWT token and getting user info from payload
+
 
 # Create a new user
 @app.post("/create/user")

@@ -97,11 +97,16 @@ async def delete_task(task_id: int, db: Session = Depends(get_db)):
     return successful_response(201)
 
 
-# Generate a success response
 def successful_response(status_code: int):
+    """Generate a successful response including a status code and message
+
+    Args:
+        status_code (int): The status code to return
+
+    """
     return {"status": status_code, "transaction": "Successful"}
 
 
-# General exception users for tasks
 def http_exception():
+    """Generate a general exception with a 404 status code"""
     return HTTPException(status_code=404, detail="Task not found")

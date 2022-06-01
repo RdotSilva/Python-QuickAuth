@@ -1,10 +1,11 @@
+from statistics import mode
 from typing import Optional
 from fastapi import FastAPI, Depends, HTTPException
 import models
 from database import engine, SessionLocal
 from sqlalchemy.orm import Session
 from pydantic import BaseModel, Field
-
+from auth import get_current_user, get_user_exception
 
 app = FastAPI()
 
@@ -32,6 +33,22 @@ class Task(BaseModel):
 @app.get("/")
 async def read_all(db: Session = Depends(get_db)):
     return db.query(models.Tasks).all()
+
+
+# Read all tasks by current logged in user
+@app.get("/tasks/user")
+async def read_all_by_user(
+    user: dict = Depends(get_current_user), db: Session = Depends(get_db)
+):
+    if user is None:
+        raise get_user_exception()
+
+    print(user)
+    return (
+        db.query(models.Tasks)
+        .filter(models.Tasks.owner_id == user.get("user_id"))
+        .all()
+    )
 
 
 # Read task based on ID

@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from database import SessionLocal, engine
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from datetime import datetime, timedelta
-from jose import jwt
+from jose import JWTError, jwt
 import os
 from dotenv import load_dotenv
 
@@ -113,8 +113,25 @@ def create_access_token(
     encode.update({"exp": expire})
     return jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
 
-async def get_current_user():
-    #TODO: Find current user by decoding the JWT token and getting user info from payload
+
+async def get_current_user(token: str = Depends(oauth2_bearer)):
+    """_summary_
+
+    Args:
+        token (str, optional): The token of the user to return. Defaults to Depends(oauth2_bearer).
+
+    Raises:
+        HTTPException: 404 - User not found
+    """
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        username: str = payload.get("sub")
+        user_id: int = payload.get("id")
+        if username is None or user_id is None:
+            raise HTTPException(status_code=404, detail="User not found")
+        return {"username": username, "user_id": user_id}
+    except JWTError:
+        raise HTTPException(status_code=404, detail="User not found")
 
 
 # Create a new user

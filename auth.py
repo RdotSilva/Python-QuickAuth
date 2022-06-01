@@ -181,3 +181,13 @@ def get_user_exception():
         headers={"WWW-Authenticate": "Bearer"},
     )
     return credentials_exception_response
+
+
+def token_exception():
+    """Create a custom exception response for authorizing user"""
+    token_exception_response = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Incorrect username or password",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    return token_exception_response

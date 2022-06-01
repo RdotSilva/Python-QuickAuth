@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, status
 from pydantic import BaseModel
 from typing import Optional
 import models
@@ -170,3 +170,14 @@ async def login_for_access_token(
     token = create_access_token(user.username, user.id, expires_delta=token_expires)
 
     return {"token": token}
+
+
+# Exceptions
+def get_user_exception():
+    """Create a custom exception response for decoding user info from JWT"""
+    credentials_exception_response = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    return credentials_exception_response

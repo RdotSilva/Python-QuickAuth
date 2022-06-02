@@ -68,13 +68,19 @@ async def read_task(
 
 # Add a new task
 @app.post("/")
-async def create_task(task: Task, db: Session = Depends(get_db)):
+async def create_task(
+    task: Task, user: dict = Depends(get_current_user), db: Session = Depends(get_db)
+):
+    if user is None:
+        raise get_user_exception()
+
     # Map the task to the DB model
     task_model = models.Tasks()
     task_model.title = task.title
     task_model.description = task.description
     task_model.priority = task.priority
     task_model.complete = task.complete
+    task_model.owner_id = user.get("id")
 
     # Add to DB and commit
     db.add(task_model)

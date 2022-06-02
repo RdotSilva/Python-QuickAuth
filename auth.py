@@ -129,7 +129,7 @@ async def get_current_user(token: str = Depends(oauth2_bearer)):
         user_id: int = payload.get("id")
         if username is None or user_id is None:
             raise get_user_exception()
-        return {"username": username, "user_id": user_id}
+        return {"username": username, "id": user_id}
     except JWTError:
         raise get_user_exception()
 

@@ -126,8 +126,19 @@ async def update_task(
 
 # Remove an existing task by ID
 @app.delete("/{task_id}")
-async def delete_task(task_id: int, db: Session = Depends(get_db)):
-    task_model = db.query(models.Tasks).filter(models.Tasks.id == task_id).first()
+async def delete_task(
+    task_id: int, user: dict = Depends(get_current_user), db: Session = Depends(get_db)
+):
+
+    if user is None:
+        raise get_user_exception()
+
+    task_model = (
+        db.query(models.Tasks)
+        .filter(models.Tasks.id == task_id)
+        .filter(models.Tasks.owner_id == user.get("id"))
+        .first()
+    )
 
     if task_model is None:
         raise http_exception()

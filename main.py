@@ -90,6 +90,7 @@ async def create_task(
 
 
 # Update an existing task by ID
+# TODO: Test this in Postman
 @app.put("/{task_id}")
 async def update_task(
     task_id: int,
@@ -125,6 +126,7 @@ async def update_task(
 
 
 # Remove an existing task by ID
+# TODO: Test this in Postman
 @app.delete("/{task_id}")
 async def delete_task(
     task_id: int, user: dict = Depends(get_current_user), db: Session = Depends(get_db)

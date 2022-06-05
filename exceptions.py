@@ -15,3 +15,6 @@ def get_user_exception():
 
 def bad_request_exception():
     return HTTPException(status_code=400, detail="Bad request please check your request and try again")
+
+def forbidden_request_exception():
+    return HTTPException(status_code=403, detail="Request is forbidden")

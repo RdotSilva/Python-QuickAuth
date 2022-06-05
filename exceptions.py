@@ -18,3 +18,6 @@ def bad_request_exception():
 
 def forbidden_request_exception():
     return HTTPException(status_code=403, detail="Request is forbidden")
+
+def too_many_requests_exception():
+    return HTTPException(status_code=429, detail="Too many requests, please slow down")

@@ -14,10 +14,13 @@ def get_user_exception():
     return credentials_exception_response
 
 def bad_request_exception():
+    """Create a custom exception response for a bad request"""
     return HTTPException(status_code=400, detail="Bad request please check your request and try again")
 
 def forbidden_request_exception():
+    """Create a custom exception response for a forbidden request"""
     return HTTPException(status_code=403, detail="Request is forbidden")
 
 def too_many_requests_exception():
+    """Create a custom exception response for rate limiting"""
     return HTTPException(status_code=429, detail="Too many requests, please slow down")

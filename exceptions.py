@@ -12,3 +12,6 @@ def get_user_exception():
         headers={"WWW-Authenticate": "Bearer"},
     )
     return credentials_exception_response
+
+def bad_request_exception():
+    return HTTPException(status_code=400, detail="Bad request please check your request and try again")

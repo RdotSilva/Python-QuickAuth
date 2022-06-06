@@ -5,7 +5,8 @@ import models
 from database import engine, SessionLocal
 from sqlalchemy.orm import Session
 from pydantic import BaseModel, Field
-from auth import get_current_user, get_user_exception
+from auth import get_current_user
+from exceptions import get_user_exception, http_exception
 
 app = FastAPI()
 
@@ -160,8 +161,3 @@ def successful_response(status_code: int):
 
     """
     return {"status": status_code, "transaction": "Successful"}
-
-
-def http_exception():
-    """Generate a general exception with a 404 status code"""
-    return HTTPException(status_code=404, detail="Task not found")

@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 from jose import JWTError, jwt
 import os
 from dotenv import load_dotenv
+from exceptions import get_user_exception, token_exception
 
 load_dotenv()
 
@@ -170,24 +171,3 @@ async def login_for_access_token(
     token = create_access_token(user.username, user.id, expires_delta=token_expires)
 
     return {"token": token}
-
-
-# Exceptions
-def get_user_exception():
-    """Create a custom exception response for decoding user info from JWT"""
-    credentials_exception_response = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
-    return credentials_exception_response
-
-
-def token_exception():
-    """Create a custom exception response for authorizing user"""
-    token_exception_response = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Incorrect username or password",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
-    return token_exception_response

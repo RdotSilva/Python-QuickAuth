@@ -1,6 +1,5 @@
-from statistics import mode
 from typing import Optional
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends
 import models
 from database import engine, SessionLocal
 from sqlalchemy.orm import Session

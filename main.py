@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from pydantic import BaseModel, Field
 from auth import get_current_user
 from exceptions import get_user_exception, http_exception
-from responses import successful_response
+from responses import successful_response, successful_task_created_response
 
 app = FastAPI()
 
@@ -87,7 +87,7 @@ async def create_task(
     db.add(task_model)
     db.commit()
 
-    return successful_response(201)
+    return successful_task_created_response()
 
 
 # Update an existing task by ID
